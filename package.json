@@ -4,7 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.ts"
+    "start": "nodemon src/index.ts",
+    "install": "yarn build:node && yarn build:react",
+    "postinstall": "mkdir -p build/front-end && cp -r front-end/build build/front-end/",
+    "build:node": "tsc -p .",
+    "build:react": "cd front-end && yarn build"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",

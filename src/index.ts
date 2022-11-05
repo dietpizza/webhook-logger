@@ -17,7 +17,9 @@ io.on("connection", (sck) => {
   user = sck;
 });
 
-app.get("/", (req, res) => {
+app.use(express.static("front-end/build"));
+
+app.get("/hook", (req, res) => {
   res.status(200).json({ ok: true });
   user?.emit("data", req.body);
 });

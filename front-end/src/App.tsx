@@ -1,27 +1,44 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 const Log = {
-  i: (...data: any) => console.log("[INFO]", ...data),
-  d: (...data: any) => console.log("[DEBUG]", ...data),
-  e: (...data: any) => console.log("[ERROR]", ...data),
+  i: (...data: any) => console.info("[INFO]", ...data),
+  d: (...data: any) => console.debug("[DEBUG]", ...data),
+  e: (...data: any) => console.error("[ERROR]", ...data),
 };
 
 function App() {
-  const socket = useRef<Socket>();
+  const [socket, setSocket] = useState<Socket>();
+  const [url, setUrl] = useState(document.location.toString());
 
   useEffect(() => {
-    socket.current = io("http://localhost:4000");
-    socket.current?.on("data", (data) => Log.i(data, data));
-    socket.current?.on("connect", () => {
+    console.log("called useEffect");
+    socket?.on("data", (data) => Log.i(data, data));
+    socket?.on("connect", () => {
       Log.i("User", "Connected", "!");
     });
     return () => {
-      socket.current?.disconnect();
+      socket?.disconnect();
     };
-  }, []);
+  }, [socket]);
 
-  return <div className="App"></div>;
+  const onSubmit = () => setSocket(io(url));
+
+  return (
+    <div className="App">
+      <div className="container">
+        <input
+          value={url}
+          type="text"
+          className="url-input"
+          onChange={({ target: { value } }) => setUrl(value)}
+        />
+        <button type="submit" className="submit-button" onClick={onSubmit}>
+          CONNECT
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default App;

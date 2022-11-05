@@ -3,9 +3,11 @@
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "outDir": "build",
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "front-end"
   ]
 }
